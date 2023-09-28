@@ -31,8 +31,8 @@ router.register(r'necklineressignal', views.NecklineResSignalViewSet, basename="
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('usFunc/admin/', admin.site.urls),
-    path('usFunc/', include(router.urls)),
-    path('usFunc/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('usFunc2/admin/', admin.site.urls),
+    path('usFunc2/', include(router.urls)),
+    path('usFunc2/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 

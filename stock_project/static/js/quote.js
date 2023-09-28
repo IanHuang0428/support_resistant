@@ -455,7 +455,7 @@ $(document).ready(function (){
         }
     //拿到参数后使用Ajax向后提交
     $.ajax({
-        url: "/support_resistant/run_single/",
+        url: "/supRes/support_resistant/run_single/",
         type: "post",
         data : supres_params,
         dataType : 'json',

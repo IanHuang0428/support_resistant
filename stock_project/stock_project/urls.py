@@ -18,6 +18,6 @@ from django.urls import path,include
 from support_resistant import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('support_resistant/', include('support_resistant.urls')),
+    path('supRes/admin/', admin.site.urls),
+    path('supRes/support_resistant/', include('support_resistant.urls')),
 ]
