@@ -1,0 +1,36 @@
+version: '3'
+services:
+  funcAPI:
+    build: ./func_api
+    image: func_api
+    container_name: funcAPI
+    restart: always
+    ports: 
+      - 5062:6000
+    environment:
+      DATA_API_ROOT: https://cosbi5.ee.ncku.edu.tw/usData/
+      DATA_API_USER: searchfunc
+      DATA_API_PASSWORD: scbdfunc*
+      PYTHONUNBUFFERED: 1
+
+  Web:
+    build: ./stock_project
+    image: us_web
+    container_name: Web
+    restart: always
+    ports:
+      - 5063:8000
+    environment:
+      DATA_API_ROOT: https://cosbi5.ee.ncku.edu.tw/usData/
+      DATA_API_USER: searchfunc
+      DATA_API_PASSWORD: scbdfunc*
+      FUNC_API_ROOT: https://cosbi5.ee.ncku.edu.tw/usFunc/
+      USER_DB_HOST: 140.116.214.134
+      USER_DB_NAME: usUser
+      USER_DB_USER: thomas
+      USER_DB_PASSWORD: AUTh6496
+      USER_DB_PORT: 5432
+      AUTH_PATH: https://cosbi5.ee.ncku.edu.tw/usAuth/
+      ROOT_PATH: https://cosbi5.ee.ncku.edu.tw/
+      PYTHONUNBUFFERED: 1
+
