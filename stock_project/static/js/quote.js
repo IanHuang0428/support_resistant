@@ -714,7 +714,8 @@ $(document).ready(function (){
                 Highcharts.stockChart('container', obj);
                 var radioButtonContainerbuy=$('#radio-container-buy')
                 var radioButtonContainersell=$('#radio-container-sell')
-
+                $('#radio-container-sell').empty();
+                $('#radio-container-buy').empty();
                 if (res['gap_up_signal'].length > 0) {
                     addRadioButtonbuy('up gap', 'up_gap','long');
                 }
