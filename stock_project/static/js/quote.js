@@ -717,6 +717,7 @@ $(document).ready(function (){
                 var radioButtonContainersell=$('#radio-container-sell')
                 $('#radio-container-sell').empty();
                 $('#radio-container-buy').empty();
+                // long
                 if (res['gap_up_signal'].length > 0) {
                     addRadioButtonbuy('up gap', 'up_gap','long');
                 }
@@ -724,46 +725,46 @@ $(document).ready(function (){
                     addRadioButtonbuy('big volume', 'big_volume_buy','long');
                 }
                 if (res['resistance_signal'].length > 0) {
-                    addRadioButtonbuy('resistance', 'resistance','long');
+                    addRadioButtonbuy('resistance break out', 'resistance','long');
                 }
                 if (res['neckline_resistance_signal'].length > 0) {
-                    addRadioButtonbuy('neckline resistance', 'neckline_resistance','long');
+                    addRadioButtonbuy('neckline resistance break out', 'neckline_resistance','long');
                 }
                 if (res['two_signals_upgap_bar'].length > 0) {
                     addRadioButtonbuy('up gap & big bolume', 'up_gap_big_bolume','long');
                 }
                 if (res['two_signals_upgap_resistance'].length > 0) {
-                    addRadioButtonbuy('up gap & resistance', 'up_gap_resistance','long');
+                    addRadioButtonbuy('up gap & resistance break out', 'up_gap_resistance','long');
                 }
                 if (res['two_signals_upgap_resistance_neckline'].length > 0) {
-                    addRadioButtonbuy('up gap & neckline resistance', 'up_gap_neckline_resistance','long');
+                    addRadioButtonbuy('up gap & neckline resistance break out', 'up_gap_neckline_resistance','long');
                 }
                 if (res['two_signals_bar_resistance'].length > 0) {
-                    addRadioButtonbuy('big volume & resistance','big volume_resistance','long');
+                    addRadioButtonbuy('big volume & resistance break out','big volume_resistance','long');
                 }
                 if (res['two_signals_bar_resistance_neckline'].length > 0) {
-                    addRadioButtonbuy('big volume & neckline resistance','big volume_neckline_resistance','long');
+                    addRadioButtonbuy('big volume & neckline resistance break out','big volume_neckline_resistance','long');
                 }
                 if (res['two_signals_resistance_resistance_neckline'].length > 0) {
-                    addRadioButtonbuy('resistance & neckline resistance','resistance_neckline_resistance','long');
+                    addRadioButtonbuy('resistance break out & neckline resistance break out','resistance_neckline_resistance','long');
                 }
                 if (res['three_signals_upgap_bar_resistance'].length > 0) {
-                    addRadioButtonbuy('up gap & big volume & resistance','up_gap_big_volume_resistance','long');
+                    addRadioButtonbuy('up gap & big volume & resistance break out','up_gap_big_volume_resistance','long');
                 }
                 if (res['three_signals_upgap_bar_resistance_neckline'].length > 0) {
-                    addRadioButtonbuy('up gap & resistance & neckline resistance','up_gap_resistance_neckline_resistance','long');
+                    addRadioButtonbuy('up gap & resistance break out & neckline resistance break out','up_gap_resistance_neckline_resistance','long');
                 }
                 if (res['three_signals_bar_resistance_resistance_neckline'].length > 0) {
-                    addRadioButtonbuy('big volume & resistance & neckline resistance',' big volume_resistance_neckline_resistance','long');
+                    addRadioButtonbuy('big volume & resistance break out & neckline resistance break out',' big volume_resistance_neckline_resistance','long');
                 }
                 if (res['three_signals_upgap_resistance_resistance_neckline'].length > 0) {
-                    addRadioButtonbuy('up gap & resistance & neckline resistance','up_gap_resistance_neckline_resistance','long');
+                    addRadioButtonbuy('up gap & resistance break out & neckline resistance break out','up_gap_resistance_neckline_resistance','long');
                 }
                 if (res['four_signals_buy'].length > 0) {
                     addRadioButtonbuy('all signals',' all_signals');
                 }
                 radioButtonContainerbuy.show();
-                // long
+                // short
                 if (res['gap_down_signal'].length > 0) {
                     addRadioButtonsell('down gap', 'down_gap','short');
                 }
@@ -771,47 +772,44 @@ $(document).ready(function (){
                     addRadioButtonsell('big volume', 'big_volume_sell','short');
                 }
                 if (res['support_signal'].length > 0) {
-                    addRadioButtonsell('support', 'support','short');
+                    addRadioButtonsell('support break down', 'support','short');
                 }
                 if (res['neckline_support_signal'].length > 0) {
-                    addRadioButtonsell('neckline support', 'neckline_support','short');
+                    addRadioButtonsell('neckline support break down', 'neckline_support','short');
                 }
                 if (res['two_signals_downgap_bar'].length > 0) {
                     addRadioButtonsell('down gap & big bolume', 'down_gap_big_bolume','short');
                 }
                 if (res['two_signals_downgap_support'].length > 0) {
-                    addRadioButtonsell('down gap & support', 'down_gap_support','short');
+                    addRadioButtonsell('down gap & support break down', 'down_gap_support','short');
                 }
                 if (res['two_signals_downgap_support_neckline'].length > 0) {
-                    addRadioButtonsell('down gap & neckline support', 'down_gap_neckline_support','short');
+                    addRadioButtonsell('down gap & neckline support break down', 'down_gap_neckline_support','short');
                 }
                 if (res['two_signals_bar_support'].length > 0) {
-                    addRadioButtonsell('big volume & support','big volume_support','short');
+                    addRadioButtonsell('big volume & support break down','big volume_support','short');
                 }
                 if (res['two_signals_bar_support_neckline'].length > 0) {
-                    addRadioButtonsell('big volume & neckline support','big volume_neckline_support','short');
+                    addRadioButtonsell('big volume & neckline support break down','big volume_neckline_support','short');
                 }
                 if (res['two_signals_support_support_neckline'].length > 0) {
-                    addRadioButtonsell('support & neckline support','support_neckline_support','short');
+                    addRadioButtonsell('support break down & neckline support break down','support_neckline_support','short');
                 }
                 if (res['three_signals_downgap_bar_support'].length > 0) {
-                    addRadioButtonsell('down gap & big volume & support','down_gap_big_volume_support','short');
+                    addRadioButtonsell('down gap & big volume & support break down','down_gap_big_volume_support','short');
                 }
                 if (res['three_signals_downgap_bar_support_neckline'].length > 0) {
-                    addRadioButtonsell('down gap & big volume & neckline support','down_gap_big_volume_neckline_support','short');
+                    addRadioButtonsell('down gap & big volume & neckline support break down','down_gap_big_volume_neckline_support','short');
                 }
                 if (res['three_signals_bar_support_support_neckline'].length > 0) {
-                    addRadioButtonsell('big volume & support & neckline support',' big volume_support_neckline_support','short');
+                    addRadioButtonsell('big volume & support break down & neckline support break down',' big volume_support_neckline_support','short');
                 }
                 if (res['three_signals_downgap_support_support_neckline'].length > 0) {
-                    addRadioButtonsell('down gap & support & neckline support','down_gap_support_neckline_support','short');
+                    addRadioButtonsell('down gap & support break down & neckline support break down','down_gap_support_neckline_support','short');
                 }
                 if (res['four_signals_sell'].length > 0) {
                     addRadioButtonsell('all signals','all_signals','short');
                 }
-                // 
-                
-                // 創建核取方塊後，添加到 <li> 元素中
                 var seriesCount_before = obj.series.length;
                 radioButtonContainersell.show();
                 $("#run_strategy").on("click", function () {
@@ -830,47 +828,47 @@ $(document).ready(function (){
                     return radio.nextElementSibling.textContent.trim();
                     });
                     var signalData = [];
-                   
+                    // long
                     if (JSON.stringify(long_signal) === JSON.stringify(["up gap"])) {
                         signalData.push(addScatterSeriesbuy(res['gap_up_signal']))
                     }
                     if (JSON.stringify(long_signal) === JSON.stringify(["big volume"])) {
                         signalData.push(addScatterSeriesbuy(res['big_volume']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['resistance_signal']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["neckline resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["neckline resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['neckline_resistance_signal']))
                     }
                     if (JSON.stringify(long_signal) === JSON.stringify(["up gap & big bolume"])) {
                         signalData.push(addScatterSeriesbuy(res['two_signals_upgap_bar']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['two_signals_upgap_resistance']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & neckline resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & neckline resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['two_signals_upgap_resistance_neckline']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["big volume & resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["big volume & resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['two_signals_bar_resistance']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["big volume & neckline resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["big volume & neckline resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['two_signals_bar_resistance_neckline']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["resistance & neckline resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["resistance break out & neckline resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['two_signals_resistance_resistance_neckline']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & big volume & resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & big volume & resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['three_signals_upgap_bar_resistance']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & resistance & neckline resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & big volume & neckline resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['three_signals_upgap_bar_resistance_neckline']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["big volume & resistance & neckline resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["big volume & resistance break out & neckline resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['three_signals_bar_resistance_resistance_neckline']))
                     }
-                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & resistance & neckline resistance"])) {
+                    if (JSON.stringify(long_signal) === JSON.stringify(["up gap & resistance break out & neckline resistance break out"])) {
                         signalData.push(addScatterSeriesbuy(res['three_signals_upgap_resistance_resistance_neckline']))
                     }
                     if (JSON.stringify(long_signal) === JSON.stringify(["all signals"])) {
@@ -879,65 +877,48 @@ $(document).ready(function (){
                     // short
                     if (JSON.stringify(short_signal) === JSON.stringify(["down gap"])) {
                         signalData.push(addScatterSeriessell(res['gap_down_signal']))
-
                     }
                     if (JSON.stringify(short_signal) === JSON.stringify(["big volume"])) {
                         signalData.push(addScatterSeriessell(res['big_volume']))
-                        
-                       
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["support break down"])) {
                         signalData.push(addScatterSeriessell(res['support_signal']))
-                        console.log(signalData)
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["neckline support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["neckline support break down"])) {
                         signalData.push(addScatterSeriessell(res['neckline_support_signal']))
-
                     }
                     if (JSON.stringify(short_signal) === JSON.stringify(["down gap & big bolume"])) {
                         signalData.push(addScatterSeriesbuy(res['two_signals_downgap_bar']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & support break down"])) {
                         signalData.push(addScatterSeriessell(res['two_signals_downgap_support']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & neckline support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & neckline support break down"])) {
                         signalData.push(addScatterSeriessell(res['two_signals_downgap_support_neckline']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["big volume & support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["big volume & support break down"])) {
                         signalData.push(addScatterSeriessell(res['two_signals_bar_support']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["big volume & neckline support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["big volume & neckline support break down"])) {
                         signalData.push(addScatterSeriessell(res['two_signals_bar_support_neckline']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["support & neckline support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["support break down & neckline support break down"])) {
                         signalData.push(addScatterSeriessell(res['two_signals_support_support_neckline']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & big volume & support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & big volume & support break down"])) {
                         signalData.push(addScatterSeriessell(res['three_signals_downgap_bar_support']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & support & neckline support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & big volume & neckline support break down"])) {
                         signalData.push(addScatterSeriessell(res['three_signals_downgap_bar_support_neckline']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["big volume & support & neckline support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["big volume & support break down & neckline support break down"])) {
                         signalData.push(addScatterSeriessell(res['three_signals_bar_support_support_neckline']))
-
                     }
-                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & support & neckline support"])) {
+                    if (JSON.stringify(short_signal) === JSON.stringify(["down gap & support break down & neckline support break down"])) {
                         signalData.push(addScatterSeriessell(res['three_signals_downgap_support_support_neckline']))
-
                     }
                     if (JSON.stringify(short_signal) === JSON.stringify(["all signals"])) {
                         signalData.push(addScatterSeriessell(res['four_signals_sell']))
-
                     }
                     var integratedData = [];
                     var currentSignal = null;
@@ -1023,8 +1004,7 @@ $(document).ready(function (){
                             
                             };
                     }
-                    else if (!(JSON.stringify(long_signal) === JSON.stringify(["big volume"])) && 
-                            !(JSON.stringify(short_signal) === JSON.stringify(["big volume"]))) {
+                    else  {
                     signalDataresults.forEach(function(dataPoint) {
                         var date = dataPoint[0];
                         var signal = dataPoint[1];
