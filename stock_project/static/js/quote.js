@@ -554,14 +554,15 @@ $(document).ready(function (){
                 }
                 // neckline的report格式
                 if (res['neckline_report'] != []) {
+                    console.log(res['neckline_report'],'neckline')
                     for (var i = 0; i < res['neckline_report'].length; i++) {
                         var rowData = res['neckline_report'][i];
                         var row = [
                             res['symbol'],
                             res['stock_data'][res['stock_data'].length - 1][4].toFixed(2),
+                            rowData[3],
                             rowData[0],
-                            rowData[1],
-                            moment(rowData[2]).format('YYYY-MM-DD'),
+                            moment(rowData[1]).format('YYYY-MM-DD'),
                             rowData[3],
                         ];
                         neckline_table.row.add(row).draw();
@@ -803,7 +804,7 @@ $(document).ready(function (){
                     addRadioButtonsell('big volume & support & neckline support',' big volume_support_neckline_support','short');
                 }
                 if (res['three_signals_downgap_support_support_neckline'].length > 0) {
-                    addRadioButtonsell('down gap & support &  neckline support','down_gap_support_neckline_support','short');
+                    addRadioButtonsell('down gap & support & neckline support','down_gap_support_neckline_support','short');
                 }
                 if (res['four_signals_sell'].length > 0) {
                     addRadioButtonsell('all signals','all_signals','short');
@@ -938,16 +939,95 @@ $(document).ready(function (){
                         signalData.push(addScatterSeriessell(res['four_signals_sell']))
 
                     }
-                    
-                    var integratedData = []; // 用於存儲整合後的數據
-                    var currentSignal = null; // 用於跟蹤當前的訊號值
+                    var integratedData = [];
+                    var currentSignal = null;
                     var signalDataresults = [].concat(...signalData)
-                    // 創建一個字典（映射），用於存儲日期對應的訊號值
                     var signalMap = {};
+                    if ((JSON.stringify(long_signal) === JSON.stringify(["big volume"]))&&
+                    (JSON.stringify(short_signal) === JSON.stringify(["big volume"]))) {
+                        signalDataresults.forEach(function(dataPoint) {
+                            var date = dataPoint[0];
+                            var signal = dataPoint[1];
+                            signalMap[date] = signal;
+                        });
+                        ohlc.forEach(function(ohlcPoint) {
+                            var date = ohlcPoint[0];
+                            var signal = signalMap[date];
+                            if (signal !== undefined) {
+                                currentSignal = 0;
+                            } else if (currentSignal === null) {
+                                currentSignal = 0;
+                            }
+                        
+                            // 添加整合後的資料到 integratedData 中，包括日期、OHLC 資料和相應的訊號值
+                            integratedData.push([date,currentSignal]);
+                            
+                        });
+                        var signal_line = {
+                            type: 'line', // 指定圖表類型（這裡使用線性圖表）
+                            showInLegend: false,
+                            name: 'new-series', // 指定 series 的名稱
+                            data: integratedData, // 指定 series 的數據（這裡 newDataArray 是一個包含數據點的陣列）
+                            yAxis: 2,// 其他你需要設置的屬性
+                            dataGrouping: {
+                                units: groupingUnits,
+                                enabled: false
+    
+                            }
+                            ,lineWidth: 2
+                        };
+                        var longSignals = [];
+                        var shortSignals = [];
+                        var signalDataArray = Object.entries(signalMap).map(function(entry) {
+                            var date = parseInt(entry[0]);
+                            var signal = entry[1];
+                                if (signal === -1) {
+                                    shortSignals.push([date, 0]);
+                                    longSignals.push([date, 0])
+                                }
+    
+                                return [date, signal];
+                                });
+                            var longSignalspoint = {
+                                type: 'scatter',
+                                data: longSignals , // 使用傳遞的數據
+                                name: 'Long',
+                                marker: {
+                                    symbol: 'triangle',
+                                    fillColor: 'green',
+                                    lineColor: 'green',
+                                    lineWidth: 2,
+                                    name: 'buy',
+                                    enabled: true,
+                                    radius: 6
+                                },
+                                visibility: true,
+                                yAxis: 2
+                            
+                            };
+                            var shortSignalspoint = {
+                                type: 'scatter',
+                                data: shortSignals , // 使用傳遞的數據
+                                name: 'Sell',
+                                marker: {
+                                    symbol: 'triangle-down',
+                                    fillColor: 'red',
+                                    lineColor: 'red',
+                                    lineWidth: 2,
+                                    name: 'sell',
+                                    enabled: true,
+                                    radius: 6
+                                },
+                                visibility: true,
+                                yAxis: 2
+                            
+                            };
+                    }
+                    else if (!(JSON.stringify(long_signal) === JSON.stringify(["big volume"])) && 
+                            !(JSON.stringify(short_signal) === JSON.stringify(["big volume"]))) {
                     signalDataresults.forEach(function(dataPoint) {
                         var date = dataPoint[0];
                         var signal = dataPoint[1];
-
                         signalMap[date] = signal;
                     });
                     ohlc.forEach(function(ohlcPoint) {
@@ -961,13 +1041,15 @@ $(document).ready(function (){
                     
                         // 添加整合後的資料到 integratedData 中，包括日期、OHLC 資料和相應的訊號值
                         integratedData.push([date,currentSignal]);
+                        
                     });
+                    
                     var signal_line = {
                         type: 'line', // 指定圖表類型（這裡使用線性圖表）
                         showInLegend: false,
                         name: 'new-series', // 指定 series 的名稱
                         data: integratedData, // 指定 series 的數據（這裡 newDataArray 是一個包含數據點的陣列）
-                        yAxis: 2,
+                        yAxis: 2,// 其他你需要設置的屬性
                         dataGrouping: {
                             units: groupingUnits,
                             enabled: false
@@ -1022,14 +1104,16 @@ $(document).ready(function (){
                             yAxis: 2
                         
                         };
-                        var seriesCount_after= obj.series.length;
-                        if ((seriesCount_after-seriesCount_before) ==3){
-                            obj.series.splice(seriesCount_after - 3, 3)
-                        }
-                        obj.series.push(signal_line);
-                        obj.series.push(longSignalspoint);
-                        obj.series.push(shortSignalspoint);
-                        Highcharts.stockChart('container', obj)
+                    }
+                    var seriesCount_after= obj.series.length;
+                    if ((seriesCount_after-seriesCount_before) ==3){
+                        obj.series.splice(seriesCount_after - 3, 3)
+                    }
+                    // 將新的 series 物件添加到 obj 的 series 陣列中
+                    obj.series.push(signal_line);
+                    obj.series.push(longSignalspoint);
+                    obj.series.push(shortSignalspoint);
+                    Highcharts.stockChart('container', obj)
                     })
                 $("#support_active").on("click", function () {
                     checkboxSeriesVisibility(2, 2 + res['support_active'].length, obj);
