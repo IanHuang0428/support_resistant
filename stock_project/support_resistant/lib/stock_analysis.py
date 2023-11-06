@@ -5,8 +5,11 @@ from datetime import datetime
 import time
 from . format_highchart import transform_bar_volume, transform_line, transform_bar_gap, transform_neckline,transform_sup_res_signal
 import pprint
+import os
 from common.func_api_client import FuncClient
 from common.api_client import APIClient
+from collections import defaultdict
+from . import mail
 
 ac = APIClient()
 func_client = FuncClient()
@@ -97,8 +100,10 @@ def get_all_technical_analysis(
     analysis_results["gap_down_inactive"]=gap_down_inactive
     analysis_results["gap_up_signal"]=gap_up_signal
     analysis_results["gap_down_signal"]=gap_down_signal
-    # # Volume
+    
+    # Volume
     res = func_client.get_volume(symbol, start_date, previous_day, survival_time)
+
     # transform to timestamp    
     large_volume = transform_bar_volume(res)
     large_volume_acitve=large_volume[0]
@@ -114,11 +119,16 @@ def get_all_technical_analysis(
     res = func_client.get_supres(symbol, start_date, closeness_threshold, peak_left, peak_right, valley_left, valley_right, swap_times)
     stock_data = get_stock_data(symbol, start_date)[0]
     support_resistance = transform_line(res, stock_data)
+
      # support signal
     res = func_client.get_supsignal(symbol, start_date, closeness_threshold, peak_left, peak_right, valley_left, valley_right, swap_times)
+
+
     sup_signal  = transform_sup_res_signal(res)
+    
     # resistance signal
     res = func_client.get_ressignal(symbol, start_date, closeness_threshold, peak_left, peak_right, valley_left, valley_right, swap_times)
+
     res_signal  = transform_sup_res_signal(res)
     # transform to timestamp
     support_active = support_resistance[0]
@@ -198,3 +208,101 @@ def get_all_technical_analysis(
     analysis_results["stock_data"] = get_stock_data(symbol, start_date)[1]
     analysis_results['volume'] = get_stock_data(symbol, start_date)[2]
     return analysis_results
+
+def create_local_file(data, symbol, start_date):
+
+    # other_row = pd.DataFrame({'symbol': [symbol], 'start_date': [start_date],})
+    # df_short = pd.concat([other_row, df_short], ignore_index=True)
+    
+    df_short = pd.DataFrame(data['Short'])
+    short_writer = pd.ExcelWriter('all_short_signals.xlsx')
+    df_short.to_excel(short_writer, 'Short', index=False)
+    short_workbook = short_writer.book
+    short_workbook.save("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_short_signals.xlsx")
+
+    df_long = pd.DataFrame(data['Long'])
+    long_writer = pd.ExcelWriter('all_long_signals.xlsx')
+    df_long.to_excel(long_writer, 'Long', index=False)
+    long_workbook = long_writer.book
+    long_workbook.save("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_long_signals.xlsx")
+
+    print("Excel completed")
+
+def remove_local_file(filename: str):
+    print(f"successful remove {filename}!")
+    os.remove(filename)
+
+def get_signals(
+          email,
+          signals_selected_values,
+          symbol, 
+          start_date, 
+          peak_left,
+          peak_right,
+          valley_left, 
+          valley_right,
+          diff,
+          swap_times,
+          previous_day, 
+          survival_time,
+          gap_interval,
+          nk_valley_left,
+          nk_valley_right,
+          nk_peak_left,
+          nk_peak_right,
+          nk_startdate,
+          nk_enddate,
+          nk_interval,
+          nk_value):
+    
+    res = func_client.get_all_signals(
+                    symbol = symbol, 
+                    signal_numbers = signals_selected_values,
+                    start_date= start_date, 
+                    gap_interval= gap_interval,
+                    previous_day= previous_day,
+                    survival_time= survival_time,
+                    diff= diff, 
+                    peak_left = peak_left, 
+                    peak_right = peak_right, 
+                    valley_left = valley_left, 
+                    valley_right = valley_right, 
+                    swap_times = swap_times,
+                    nk_valley_left = nk_valley_left, 
+                    nk_valley_right = nk_valley_right, 
+                    nk_peak_left = nk_peak_left, 
+                    nk_peak_right = nk_peak_right, 
+                    nk_startdate = nk_startdate, 
+                    nk_enddate = nk_enddate,
+                    nk_interval = nk_interval,
+                    nk_value = nk_value)
+    
+    all_signals = defaultdict(list)
+    for status , value in  res.items():
+        for signal_num, value1 in value.items():
+            for kind, value2 in value1.items():
+                for signal in value2:
+                    date = signal[0]
+                    price = signal[1]
+                    obj = {"number_of_signals":signal_num, "kind":kind, "status":status, "date":date, "price":price}
+                    if status =="Long":
+                        all_signals['Long'].append(obj)
+                    else:
+                        all_signals['Short'].append(obj)
+
+    if dict(all_signals) != {}: 
+        create_local_file(dict(all_signals), symbol, start_date)
+
+        # send email
+        mail_obj = mail.MailHandler()
+        res = mail_obj.send(email, "/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/")
+
+        if res=={}:
+            print("Send email successful!")
+            remove_local_file("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_long_signals.xlsx")
+            remove_local_file("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_short_signals.xlsx")
+        else:
+            print("Send email failed!")
+                    
+    
+    return dict(all_signals)

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -6,18 +6,22 @@ import time
 import json
 from datetime import datetime
 import pandas as pd
-
 from collections import defaultdict
-from .lib.stock_analysis import get_all_technical_analysis
-from .lib.stock_analysis import get_stock_data
+from django.contrib import messages
+from .lib.stock_analysis import get_all_technical_analysis, get_signals
+
+
 
 def web(request):
-    # render search page
+    if not request.user.is_authenticated:
+        messages.success(request, 'Sorry ! Please Log In.')
+        return redirect("http://140.116.214.156:1984/account/login")
     return (render(request,"quote/support_resistant.html"))
-
 
 @csrf_exempt
 def singleSearch(request):
+    email = request.POST.get('email')
+    signals_selected_values = request.POST.get('signals_selected_values')
     start_date = request.POST.get('start_date')
     symbol = request.POST.get('symbol')
     peak_left = request.POST.get('peak_left')
@@ -37,6 +41,35 @@ def singleSearch(request):
     nk_enddate = request.POST.get('nk_enddate')
     nk_interval = request.POST.get('nk_interval')
     nk_value = request.POST.get('nk_value')
+    
+    if len(signals_selected_values) > 1:
+        signals_selected_values = list(eval(signals_selected_values))
+    else:
+        signals_selected_values = [int(ele) for ele in list(signals_selected_values)]
+
+
+    all_signals = get_signals(
+          email,
+          signals_selected_values,
+          symbol, 
+          start_date, 
+          peak_left,
+          peak_right,
+          valley_left, 
+          valley_right,
+          closeness_threshold,
+          swap_times,
+          previous_day, 
+          survival_time,
+          gap_interval,
+          nk_valley_left,
+          nk_valley_right,
+          nk_peak_left,
+          nk_peak_right,
+          nk_startdate,
+          nk_enddate,
+          nk_interval,
+          nk_value)
     
     AllData = get_all_technical_analysis(
         symbol,
@@ -60,8 +93,9 @@ def singleSearch(request):
     )
 
     AllData['symbol'] = symbol
+    AllData['all_signals'] = all_signals
     AllData = json.dumps(AllData)
-   
+       
     return HttpResponse(AllData)
 
 

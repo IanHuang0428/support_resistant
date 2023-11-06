@@ -53,3 +53,8 @@ data_source_apis/error_file
 *.sql
 *.csv
 *.xlsx
+*.json
+
+
+dockerfile
+docker-compose.yml

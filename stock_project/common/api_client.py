@@ -24,7 +24,7 @@ class APIClient(object):
     """
     _instance = None
     _token = None
-    ROOT = os.environ['DATA_API_ROOT']
+    ROOT = "http://140.116.214.156:7000/usData/"
     AUTH_URL = ROOT + 'token/'
     REFRESH_URL = ROOT + 'token/refresh/'
     EARNING_FILTER_URL = ROOT + 'fundamental/earnings_date/filter/'

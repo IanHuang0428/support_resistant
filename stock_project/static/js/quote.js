@@ -220,9 +220,10 @@ function slider_settings() {
   
   }
 $(document).ready(function () {
-
-slider_settings();
+    slider_settings();
 });
+
+
 // 將訊號自動生成radio buttom
 function addRadioButtonbuy(labelText, radioButtonId, radioGroupName) {
     // 创建单选按钮元素
@@ -329,7 +330,7 @@ function createbaractiveSeries(res, datatype,data,obj,color) {
         })
     }
 }
-// 前端active,inactive 點選時需要重新產生的線段
+// 前端active, inactive 點選時需要重新產生的線段
 function checkboxSeriesVisibility(startIndex, endIndex, obj) {
     for (var time = startIndex; time < endIndex; time++) {
         obj.series[time].visible = !obj.series[time].visible;
@@ -347,8 +348,14 @@ $(document).ready(function (){
         $("#supres-run").hide();
         $("#report-card-supportresistant").hide();
         // 接收前端參數
+
+        var signals_selected_values = [];
+        $('.signals-check-input:checked').each(function() {
+            signals_selected_values.push($(this).val());
+        });
         var start_date = $("#start_date").val();
         var symbol = $("#symbol").val();
+        var email = $("#email").val();
         var peak_left = $("#slider-range-Pl").slider("value");
         var peak_right = $("#slider-range-Pr").slider("value");
         var valley_left = $("#slider-range-Vl").slider("value");
@@ -378,12 +385,17 @@ $(document).ready(function (){
         var gap_down_inactive = document.getElementById("downgap_inactive").checked;
         var neckline_active = document.getElementById("neckline_active").checked;
         var neckline_inactive = document.getElementById("neckline_inactive").checked;
+
+        var view_block_long_signal = document.getElementById('view_block_long_signal');
+        var view_block_short_signal = document.getElementById('view_block_short_signal');
         var view_block_gap = document.getElementById('view_block_gap');
         var view_block_volume = document.getElementById('view_block_volume');
         var view_block_supp_resis = document.getElementById('view_block_supp_resis');
         var view_block_neckline = document.getElementById('view_block_neckline');
         // 設定form格式儲存參數
         var supres_params = new FormData;
+        supres_params.append('email', email);
+        supres_params.append('signals_selected_values', signals_selected_values);
         supres_params.append('start_date', start_date);
         supres_params.append('peak_left', peak_left)
         supres_params.append('peak_right', peak_right)
@@ -403,6 +415,13 @@ $(document).ready(function (){
         supres_params.append('nk_interval', nk_interval)
         supres_params.append('nk_value', nk_value)
         supres_params.append('symbol', symbol);
+
+        if (view_block_long_signal.style.visibility === 'hidden') {
+            view_block_long_signal.style.visibility = '';
+        }
+        if (view_block_short_signal.style.visibility === 'hidden') {
+            view_block_short_signal.style.visibility = '';
+        }
         // report表格顯示
         if (view_block_gap.style.visibility === 'hidden') {
             view_block_gap.style.visibility = '';
@@ -453,6 +472,7 @@ $(document).ready(function (){
         if (neckline_inactive == true) {
             document.getElementById("neckline_inactive").checked = false
         }
+
     //拿到参数后使用Ajax向后提交
     $.ajax({
         url: "/supRes/support_resistant/run_single/",
@@ -462,11 +482,10 @@ $(document).ready(function (){
         processData : false,
         contentType : false,
         success: function (res) {
-            // 
             $("#circle-supres").hide();
             $("#supres-run").show();
             $("#report-card-supportresistant").show();
-            var ohlc = [];
+                var ohlc = [];
                 var volume = [];
                 var gap_table = $('#GapTable').DataTable();
                 var volume_table = $('#VolumeTable').DataTable();
@@ -477,8 +496,88 @@ $(document).ready(function (){
                 volume_table.clear().draw();
                 neckline_table.clear().draw();
                 sup_res_table.clear().draw();
-                
+                $('#short_signal_table').DataTable().clear().draw();
+                $('#long_signal_table').DataTable().clear().draw();
 
+                // show short signals table
+                $('#short_signal_table').DataTable({
+                    "searching": true,
+                    "bAutoWidth": false,
+                    "bDestroy": true,
+                    "destroy": true,
+                    "aLengthMenu":[10, 20, 30],
+                    data: res["all_signals"]["Short"],
+                    pageLength:10,
+                    columns: [
+                      { data: "number_of_signals" },
+                      { data: "kind" },
+                      { data: "status" },
+                      { data: "date" },
+                      { data: "price" },
+                    ],
+                    columnDefs:[
+                        {
+                            targets: [2],
+                            createdCell: function (td, cellData, rowData, row, col) {
+                                $(td).css('color', 'red')
+                            },
+                        },
+                    ],
+
+
+                    dom: 'Bfrtip', // 添加 DataTables 按鈕
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: "detail of signals",
+                            text: "匯出Excel",
+                            customize: function (xlsx) {
+                            }
+                        },
+                        'copy',
+                        'csv', 
+                        'pdf', 
+                    ]
+                  });
+
+                // show long signals table
+                $('#long_signal_table').DataTable({
+                    "bAutoWidth": false,
+                    "bDestroy": true,
+                    "destroy": true,
+                    "aLengthMenu":[10, 20, 30],
+                    data: res["all_signals"]["Long"],
+                    pageLength:10,
+                    columns: [
+                        { data: "number_of_signals" },
+                        { data: "kind" },
+                        { data: "status" },
+                        { data: "date" },
+                        { data: "price" },
+                    ],
+                    columnDefs:[
+                        {
+                            targets: [2],
+                            createdCell: function (td, cellData, rowData, row, col) {
+                                $(td).css('color', 'red')
+                            },
+                        },
+                    ],
+                    dom: 'Bfrtip', // 添加 DataTables 按鈕
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: "detail of signals",
+                            text: "匯出Excel",
+                            customize: function (xlsx) {
+                            }
+                        },
+                        'copy',
+                        'csv', 
+                        'pdf', 
+                    ],
+                  });
+                    
                 // gap 的report格式
                 if (res['gap_up_active'] != []) {
                     for (var i = 0; i < res['gap_up_active'].length; i++) {
@@ -554,7 +653,6 @@ $(document).ready(function (){
                 }
                 // neckline的report格式
                 if (res['neckline_report'] != []) {
-                    console.log(res['neckline_report'],'neckline')
                     for (var i = 0; i < res['neckline_report'].length; i++) {
                         var rowData = res['neckline_report'][i];
                         var row = [
@@ -812,6 +910,7 @@ $(document).ready(function (){
                 }
                 var seriesCount_before = obj.series.length;
                 radioButtonContainersell.show();
+
                 $("#run_strategy").on("click", function () {
                     Highcharts.stockChart('container', obj);
                     var singal_data=[]
@@ -922,7 +1021,7 @@ $(document).ready(function (){
                     }
                     var integratedData = [];
                     var currentSignal = null;
-                    var signalDataresults = [].concat(...signalData)
+                    var signalDataresults = [].concat(...signalData) //將多維的陣列轉換為一維陣列
                     var signalMap = {};
                     if ((JSON.stringify(long_signal) === JSON.stringify(["big volume"]))&&
                     (JSON.stringify(short_signal) === JSON.stringify(["big volume"]))) {
@@ -1049,7 +1148,7 @@ $(document).ready(function (){
                             }
 
                             return [date, signal];
-                            });
+                        });
                         var longSignalspoint = {
                             type: 'scatter',
                             data: longSignals , // 使用傳遞的數據

@@ -17,9 +17,18 @@
     <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>    
 
 
-    <!--Highchart-->
+    <!--Datatable-->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css" />
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js"></script> -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    
+    <!--Highchart-->
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/stock/highcharts-more.js"></script>
@@ -43,6 +52,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
+
+    <style>.dataTables_wrapper .dt-buttons {
+        float: left;
+    }
+    </style>
+
 </head>
 
 <body>
@@ -64,8 +79,42 @@
                                 
                             </div>
                             <div>
-                                <label>Symbol</label>
+                                <label>Symbol:</label>
                                 <input style="width:100px ;height:30px; color:#000000"  id="symbol" type="search" placeholder="search">
+                            </div>
+
+                            <div>
+                                <label for="email">e-mail:</label>
+                                <input type="email" id="email" name="email" placeholder="xxx@gmail.com">
+                            </div>
+                            <br>
+
+                            <div>
+                                <label class="d-block">Number of Signals</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input signals-check-input" type="checkbox" value="1" id="flexCheckDefault1" checked>
+                                    <label class="form-check-label" for="flexCheckDefault1">
+                                      One
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input signals-check-input" type="checkbox" value="2" id="flexCheckChecked2" >
+                                    <label class="form-check-label" for="flexCheckChecked2">
+                                        Two
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input signals-check-input" type="checkbox" value="3" id="flexCheckDefault3">
+                                    <label class="form-check-label" for="flexCheckDefault3">
+                                      Three
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input signals-check-input" type="checkbox" value="4" id="flexCheckChecked4" >
+                                    <label class="form-check-label" for="flexCheckChecked4">
+                                        Four
+                                    </label>
+                                </div>
                             </div>
                             <br>
                             <!-- Input params  -->
@@ -694,32 +743,85 @@
                     
                     </div>
                 </div>
-                <div id="view_block_gap" style="visibility: hidden">
-                <div class="card gap_report" id="report-card-gap" style="margin:0px auto;margin-top:2%;" >
-                    <div class="card-header">
-                        <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>Gap</b></h4>
-                    </div>
-                    <div class="card-body">
+
+                <div id="view_block_long_signal" style="visibility: hidden">
+                    <div class="card" id="long_signal" style="margin:0px auto;margin-top:2%;" >
+                        <div class="card-header">
+                            <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>Long Signals</b></h4>
+                        </div>
                         <div class="card-body">
-                            <div class="tab-content"></div>
-                            <table id="GapTable" class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Symbol</th>
-                                        <th>Closing Price</th>
-                                        <th>Gap Type</th>
-                                        <th>Gap High</th>
-                                        <th>Gap Low</th>
-                                        <th>Gap Start Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- 資料將會動態插入這裡 -->
-                                </tbody>
-                            </table>
+                            <div class="card-body">
+                                <div class="tab-content"></div>
+                                <table id="long_signal_table" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Number Of Signals</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div>                
+
+                <div id="view_block_short_signal" style="visibility: hidden">
+                    <div class="card" id="short_signal" style="margin:0px auto;margin-top:2%;" >
+                        <div class="card-header">
+                            <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>Short Signals</b></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body">
+                                <div class="tab-content"></div>
+                                <table id="short_signal_table" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Number Of Signals</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>     
+
+                <div id="view_block_gap" style="visibility: hidden">
+                    <div class="card gap_report" id="report-card-gap" style="margin:0px auto;margin-top:2%;" >
+                        <div class="card-header">
+                            <h4 style="text-align:left"><b><i class="fas fa-user-cog"></i>Gap</b></h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-body">
+                                <div class="tab-content"></div>
+                                <table id="GapTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Symbol</th>
+                                            <th>Closing Price</th>
+                                            <th>Gap Type</th>
+                                            <th>Gap High</th>
+                                            <th>Gap Low</th>
+                                            <th>Gap Start Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- 資料將會動態插入這裡 -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
     
                 <div id="view_block_volume" style="visibility: hidden">
