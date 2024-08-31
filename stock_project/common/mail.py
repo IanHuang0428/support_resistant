@@ -13,7 +13,7 @@ class MailHandler:
     _subject: str
     
     def __init__(self):
-        gmail_acct = "/home/thomas/Desktop/safetrader/saferTrader/stock_project/support_resistant/lib/gmail.json"
+        gmail_acct = "/home/thomas/Desktop/safetrader/saferTrader/stock_project/config/gmail.json"
         with open (gmail_acct, 'r')as f:
             acct_info = json.load(f)
         self._host_email_address = acct_info['username']
@@ -38,12 +38,12 @@ class MailHandler:
         attach_file.add_header('Content-Disposition', 'attachment', filename=f"{self._local_time}_{type}_signals_report.xlsx")
         mail.attach(attach_file)
         
-    def send(self, to_address, file):
+    def send(self, to_address, folder_path):
         mail = self._create_mail(f"Monitor Report {self._local_time}", to_address)
         contents = "This is signals report."
         mail.attach(MIMEText(contents))
-        self._add_file(mail, file+"all_long_signals.xlsx", "long")
-        self._add_file(mail, file+"all_short_signals.xlsx", "short")
+        self._add_file(mail, folder_path + "all_long_signals.xlsx", "long")
+        self._add_file(mail, folder_path + "all_short_signals.xlsx", "short")
         status = self._smtp.sendmail(self._host_email_address, to_address, mail.as_string())
 
         return status

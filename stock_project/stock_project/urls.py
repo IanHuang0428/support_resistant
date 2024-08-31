@@ -20,4 +20,5 @@ from support_resistant import views
 urlpatterns = [
     path('supRes/admin/', admin.site.urls),
     path('supRes/support_resistant/', include('support_resistant.urls')),
+    path('supRes/monitor/', include('monitor.urls')),
 ]

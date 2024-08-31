@@ -44,7 +44,7 @@
 
       
       <!-- Custom styles for this template -->
-      <link href="{% static 'css/headers.css' %}" rel="stylesheet">
+      <!-- <link href="{% static 'css/headers.css' %}" rel="stylesheet"> -->
   </head>
 
   <body>
@@ -100,6 +100,17 @@
               </a>
               
               <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                
+                <li>
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="Track" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Monitor
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="Track">
+                      <a class="dropdown-item" href="http://140.116.214.156:1985/supRes/monitor/">Track List</a>
+                    </div>
+                  </div>
+                </li>
                 <li>
                   <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -110,6 +121,7 @@
                     </div>
                   </div>
                 </li>
+
               </ul>
             </div>
           </div>

@@ -340,6 +340,7 @@ class FuncClient(object):
                     symbol: str, 
                     start_date: str, 
                     signal_numbers:list,
+                    signal_kinds:list,
                     gap_interval: int,
                     previous_day: int,
                     survival_time: int,
@@ -362,6 +363,7 @@ class FuncClient(object):
             "symbol" : symbol,
             "start_date" : start_date,
             "signal_numbers" : signal_numbers,
+            "signal_kinds" : signal_kinds,
             "params" : {
                 "gap":{
                     "up_gap_interval" : gap_interval,

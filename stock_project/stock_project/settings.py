@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',  #消息框架
     'django.contrib.staticfiles',  #管理靜態文件的框架
     'support_resistant.apps.SupportResistantConfig',
+    'monitor.apps.MonitorConfig',
 ]
 
 

@@ -9,11 +9,9 @@ import os
 from collections import defaultdict
 from common.func_api_client import FuncClient
 from common.api_client import APIClient
-from common.mail import MailHandler
 
 ac = APIClient()
 func_client = FuncClient()
-mail_obj = MailHandler()
 
 def convert_timestamp_to_highchart(time_str):
     return int(time.mktime(datetime.strptime(time_str, "%Y-%m-%d").timetuple()))*1000
@@ -210,31 +208,7 @@ def get_all_technical_analysis(
     analysis_results['volume'] = get_stock_data(symbol, start_date)[2]
     return analysis_results
 
-def create_local_file(data, symbol, start_date):
-
-    # other_row = pd.DataFrame({'symbol': [symbol], 'start_date': [start_date],})
-    # df_short = pd.concat([other_row, df_short], ignore_index=True)
-    
-    df_short = pd.DataFrame(data['Short'])
-    short_writer = pd.ExcelWriter('all_short_signals.xlsx')
-    df_short.to_excel(short_writer, 'Short', index=False)
-    short_workbook = short_writer.book
-    short_workbook.save("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_short_signals.xlsx")
-
-    df_long = pd.DataFrame(data['Long'])
-    long_writer = pd.ExcelWriter('all_long_signals.xlsx')
-    df_long.to_excel(long_writer, 'Long', index=False)
-    long_workbook = long_writer.book
-    long_workbook.save("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_long_signals.xlsx")
-
-    print("Excel completed")
-
-def remove_local_file(filename: str):
-    print(f"successful remove {filename}!")
-    os.remove(filename)
-
 def get_signals(
-          email,
           signals_selected_values,
           symbol, 
           start_date, 
@@ -289,20 +263,6 @@ def get_signals(
                     if status =="Long":
                         all_signals['Long'].append(obj)
                     else:
-                        all_signals['Short'].append(obj)
-
-    if dict(all_signals) != {}: 
-        create_local_file(dict(all_signals), symbol, start_date)
-
-        # send email
-        res = mail_obj.send(email, "/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/")
-
-        if res=={}:
-            print("Send email successful!")
-            remove_local_file("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_long_signals.xlsx")
-            remove_local_file("/home/thomas/Desktop/safetrader/saferTrader/stock_project/email_report/all_short_signals.xlsx")
-        else:
-            print("Send email failed!")
-                    
+                        all_signals['Short'].append(obj)                  
     
     return dict(all_signals)
