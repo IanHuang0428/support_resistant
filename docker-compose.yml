@@ -9,8 +9,8 @@ services:
       - 1984:6000
     environment:
       DATA_API_ROOT: https://cosbi5.ee.ncku.edu.tw/usData/
-      DATA_API_USER: searchfunc
-      DATA_API_PASSWORD: scbdfunc*
+      DATA_API_USER: 
+      DATA_API_PASSWORD: 
       PYTHONUNBUFFERED: 1
 
   Web:
@@ -22,8 +22,8 @@ services:
       - 1985:8000
     environment:
       DATA_API_ROOT: https://cosbi5.ee.ncku.edu.tw/usData/
-      DATA_API_USER: searchfunc
-      DATA_API_PASSWORD: scbdfunc*
+      DATA_API_USER: 
+      DATA_API_PASSWORD: 
       FUNC_API_ROOT: http://140.116.214.156:1984/usFunc2/
       # FUNC_API_ROOT: https://cosbi5.ee.ncku.edu.tw/usFunc2/
       AUTH_PATH: https://cosbi5.ee.ncku.edu.tw/usAuth/
